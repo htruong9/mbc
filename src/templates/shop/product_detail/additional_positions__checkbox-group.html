@@ -1,0 +1,11 @@
+<div class="checkbox-group my-3">
+    <div class="checkbox-label mb-2">
+        Please choose one or more additional positions.
+    </div>
+    {% for pos in product.positions.all %}
+    <div class="checkbox-container">
+        <input type="checkbox" id="{{ type }}-logo-text__additional-position{{ pos.id }}" name="{{ type }}_logo_text__additional_positions" value="{{ pos.id }}" class="position-input" data-price="{{pos.additional_price}}"  data-title="{{pos.title}}">
+        <label for="{{ type }}-logo-text__additional-position{{ pos.id }}" data-price="{{pos.additional_price}}" data-title="{{pos.title}}">{{pos.title}}</label>
+    </div>
+    {% endfor %}
+</div>

@@ -1,0 +1,161 @@
+{% load static %}
+    {% load mptt_tags %}
+
+
+    <aside class="col-lg-3 col-md-3">
+                    <div class="shop__sidebar">
+                        <div class="sidebar__categories">
+                            <div class="section-title">
+                                <h4>Categories</h4>
+                            </div>
+                            <div class="categories__accordion">
+                                <div class="accordion" id="accordionExample" style="height: 300px;  overflow-y: scroll;">
+                                    {% recursetree categories %}
+                                    <div class="card">
+                                        <div class="card-heading">
+                                            <a data-toggle="collapse" data-target="#{{ node.slug }}">{{ node.category_name }}</a>
+                                        </div>
+                                        <div id="{{ node.slug }}" class="collapse" data-parent="#accordionExample">
+                                            <div class="card-body">
+                                                    <ul>
+                                                        <li><a href="{{ node.get_url }}">All</a></li>
+                                                    </ul>
+                                                {% if not node.is_leaf_node %}
+                                                    {% for child in node.children.all %}
+                                                    <ul>
+                                                        <li><a href="/shop/?category={{ child.get_id }}">{{ child.category_name }}</a></li>
+                                                    </ul>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endrecursetree %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sidebar__categories">
+                            <div class="section-title">
+                                <h4>Brands</h4>
+                            </div>
+                            <div class="categories__accordion">
+                                <div class="accordion" id="accordionExample">
+                                    <div class="card" style="height: 300px; overflow-y: scroll;">
+                                        {% for brand in brands %}
+                                        <div id="{{ brand.id }}" class="collapse show" data-parent="#accordionExample">
+                                            <div class="card-body">
+                                                <ul>
+                                                    <li><a href="/shop/?brand={{ brand.id }}">{{ brand.brand_name }}</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sidebar__filter">
+                            <div class="section-title">
+                                <h4>Shop by price</h4>
+                            </div>
+                            <div class="filter-range-wrap">
+                                <div class="price-range ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content"
+                                data-min="0" data-max="99"></div>
+                                <div class="range-slider">
+                                    <div class="price-input">
+                                        <p>Price:</p>
+                                        <input type="text" id="minamount"  class="min-price">
+                                        <input type="text" id="maxamount" class="max-price">
+                                    </div>
+                                </div>
+                            </div>
+                            <a id="filter-price-btn">Filter</a>
+                        </div>
+                        <div class="sidebar__sizes">
+                            <div class="section-title">
+                                <h4>Shop by gender</h4>
+                            </div>
+                            <div class="size__list">
+                                <label for="men">
+                                    men
+                                    <input type="checkbox" id="men" value="2" class="filter gender">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <label for="women">
+                                    women
+                                    <input type="checkbox" id="women" value="3" class="filter gender">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <label for="kid">
+                                    kid
+                                    <input type="checkbox" id="kid" value="1" class="filter gender">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="sidebar__sizes">
+                            <div class="section-title">
+                                <h4>Shop by size</h4>
+                            </div>
+                            <div class="size__list">
+                                <label for="xxs">
+                                    xxs
+                                    <input type="checkbox" id="xxs" value="1" class="filter size">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <label for="xs">
+                                    xs
+                                    <input type="checkbox" id="xs" value="2" class="filter size">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <label for="xss">
+                                    xs-s
+                                    <input type="checkbox" id="xss" value="3" class="filter size">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <label for="s">
+                                    s
+                                    <input type="checkbox" id="s" value="4" class="filter size">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <label for="m">
+                                    m
+                                    <input type="checkbox" id="m" value="5" class="filter size">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <label for="ml">
+                                    m-l
+                                    <input type="checkbox" id="ml" value="6" class="filter size">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <label for="l">
+                                    l
+                                    <input type="checkbox" id="l" value="7" class="filter size">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <label for="xl">
+                                    xl
+                                    <input type="checkbox" id="xl" value="8" class="filter size">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="sidebar__color">
+                            <div class="section-title">
+                                <h4>Shop by colour</h4>
+                            </div>
+                            <div class="size__list color__list" style="height: 300px; overflow-y: scroll; overflow-x: hidden;">
+                                {% for colour in colours %}
+                                <li class="list-group-item">
+                                    <input class="filter-checkbox filter colour" data-filter="colour" value="{{ colour.colour_id }}" type="checkbox" />&nbsp;
+                                    {{ colour.colour__title }}
+                                </li>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+
+                <script src="/static/js/filter.js"></script>

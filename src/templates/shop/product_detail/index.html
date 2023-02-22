@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="/static/css/product_detail-custom-style.css">
+{% endblock %}
+
+{% load static %}
+{% block content %}
+    {% include 'common/breadcrumb.html' %}
+    <section class="product-details spad">
+        <div class="container">
+            <div class="row">
+                <aside class="col-lg-6">
+                    {% include './product__details__pic.html' %}
+                </aside>
+                <main class="col-lg-6">
+                    {% include './product__details__text.html' %}
+                    {% include './product-options.html' %}
+                </main>
+                <div class="col-lg-12">
+                    {% include './product__details__tab.html' %}
+                </div>
+            </div>
+            <div class="row related-products">   
+                {% include './related-products.html' %}
+            </div>
+        </div>
+    </section>
+{% endblock %}

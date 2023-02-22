@@ -1,0 +1,50 @@
+{% if cart_item.additional_name %}
+    <div class="cart-item__additional-name">
+        <div class="cart-item__name d-flex justify-content-between">
+            <div class="cart-detail__title">
+                Additional name
+            </div>
+            <div class="cart-detail__value">
+                {{cart_item.additional_name.value}}
+            </div>
+        </div>
+
+
+        <div class="cart-item__positions">
+            <span class="cart-detail__title">
+                Positions
+            </span>
+
+            {% for pos in cart_item.additional_name.positions.all %}
+                <span class="cart-detail__value">
+                    {% if forloop.last %}
+                    {{ pos }} {% if pos.name_price > 0 %} (+£{{pos.name_price}}) {% endif%}
+                    {% else %}
+                    {{ pos }} {% if pos.name_price > 0 %} (+£{{pos.name_price}}) {% endif%}, 
+                    {% endif %}
+                </span>
+            {% endfor %}
+        </div>
+    </div>
+    <!-- <div class="pair-container">
+        <div class="">
+            <div class="title">Additional name</div>
+            <div class="">
+                <span class="title">Position</span>
+                
+                {% for pos in cart_item.additional_name.positions.all %}
+                <span class="value">
+                    {% if forloop.last %}
+                    {{ pos }} {% if pos.name_price > 0 %} (+£{{pos.name_price}}) {% endif%}
+                    {% else %}
+                    {{ pos }} {% if pos.name_price > 0 %} (+£{{pos.name_price}}) {% endif%}, 
+                    {% endif %}
+                </span>
+                {% endfor %}
+                </div>
+            </div>
+            <div class="value">
+                {{cart_item.additional_name.name}}
+            </div>                    
+    </div> -->
+{% endif %}

@@ -1,0 +1,110 @@
+{% if  product.variant != 'None'   %}
+    <!-- <input type="hidden" name="variantid" id="variantid" value="{{ variant.id }}">
+    <div id="data-checked-position" class="d-non" data-t="[]"></div> -->
+    
+    <div id="summary" class="mt-4">
+        <div class="h5">Summary:</div>
+        <div class="container" class="mt-2">
+            <div id="summary__variant" class="summary__item">
+                <div class="title">Product price (variant price)</div>
+                <div class="value">{{ first_variant.price }}</div>
+            </div>
+            <div id="summary__color" class="summary__item">
+                <div class="title">Colour</div>
+                <div class="value">{{ first_variant.colour }}</div>
+            </div>
+
+            <div id="summary__size" class="summary__item">
+                <div class="title">Size</div>
+                <div class="value">{{ first_variant.size }}</div>
+            </div>
+
+            <div class="summary__container summary__parent d-block">
+                <div id="summary__main-logo-text" class="summary__item summary__child align-items-center mb-2">
+                    <div class="title"></div>
+                    <div class="value"></div>
+                </div>
+                <div id="summary__main-position" class="summary__item summary__child">
+                    <div class="title">Position</div>
+                    <div class="value"></div>
+                </div>
+                <div id="summary__main-additional-positions" class="summary__item summary__child">
+                    <div class="title">Additional position</div>
+                    <div class="value"></div>
+                </div>
+            </div>
+
+            <div class="summary__container summary__parent" style="display: none;">
+                <div id="summary__additional-logo-text" class="summary__item summary__child align-items-center mb-2">
+                    <div class="title"></div>
+                    <div class="value"></div>
+                </div>
+                <div id="summary__additional-logo-text__positions" class="summary__item summary__child">
+                    <div class="title">Positions</div>
+                    <div class="value"></div>
+                </div>
+            </div>
+
+            <div class="summary__container summary__parent">
+                <div id="summary__additional-name" class="summary__item summary__child">
+                    <div class="title">Additional name</div>
+                    <div class="value"></div>
+                </div>
+                <div id="summary__additional-name__positions" class="summary__item summary__child">
+                    <div class="title">Positions</div>
+                    <div class="value"></div>
+                </div>
+            </div>
+
+
+            <div id="summary__voucher" class="summary__item" style="display: none;">
+                <div class="title">Discount</div>
+                <div class="value"></div>
+            </div>
+
+            <!-- <div id="each-item-price">
+
+            </div> -->
+            
+            <div id="total-price" class="summary__item mt-2">
+                <div class="title">Total</div>
+                <div class="value">0</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="product__details__button">
+        <div class="quantity">
+            <span>Quantity:</span>
+            <div class="pro-qty">
+                <input class="input no-spin" type="number" name="quantity" id="quantity" value="1" min="1">
+            </div>
+        </div>
+        <button type="submit" id="submit" class="cart-btn"><span class="icon_bag_alt"></span> Add to cart</button>
+        <ul>
+            <li><a href="#"><span class="icon_heart_alt"></span></a></li>
+            <li><a href="#"><span class="icon_adjust-horiz"></span></a></li>
+        </ul>
+    </div>
+</div>
+{% else %}
+    <!-- <form action="{% url 'add_cart' product.id %}" method="POST"  id="addchart-form"> -->
+        <!-- {% csrf_token %} -->
+        <div id="SelectedProduct">
+            <!-- <h3 class="product-price">£{{ product.price }}</h3> -->
+            <div class="product__details__button">
+                <div class="quantity">
+                    <span>Quantity:</span>
+                    <div class="pro-qty">
+                        <input class="input  no-spin" type="number" name="quantity" value="1" min="1">
+                    </div>
+                </div>
+                <button type="submit" id="add-to-cart" class="cart-btn"><span class="icon_bag_alt"></span> Add to cart</button>
+                <ul>
+                    <li><a href="#"><span class="icon_heart_alt"></span></a></li>
+                    <li><a href="#"><span class="icon_adjust-horiz"></span></a></li>
+                </ul>
+            </div>
+        </div>
+    <!-- </form> -->
+{% endif %}

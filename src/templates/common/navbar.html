@@ -1,0 +1,132 @@
+{% load static %}
+
+<!-- Offcanvas Menu Begin -->
+    <div class="offcanvas-menu-overlay"></div>
+    <div class="offcanvas-menu-wrapper">
+        <div class="offcanvas__close">+</div>
+        <ul class="offcanvas__widget">
+            <li><span class="icon_search search-switch"></span></li>
+            <li><a href="{% url 'cart:index' %}"><span class="icon_bag_alt"></span>
+                <div class="tip">
+                    {{ cart_item_count }}
+                </div>
+            </a></li>
+        </ul>
+        <div class="offcanvas__logo">
+            <a href="{% url 'home' %}"><img src="{% static 'img/logo.png' %}" alt=""></a>
+        </div>
+        <div id="mobile-menu-wrap"></div>
+        {% if user.id is None %}
+        <div class="offcanvas__auth">
+            <button class="btn btn-primary" data-toggle="modal" data-target="#modal-login">
+                Sign In / Register
+            </button>
+        </div>
+        {% else %}
+        <div class="offcanvas__auth">
+            <a href="{% url 'dashboard' %}">Hi {{ user.first_name }}</a>
+            <a id="logout" data-target="{% url 'logout' %}" href="#">Sign Out</a>
+        </div>
+        {% endif %}
+    </div>
+    <!-- Offcanvas Menu End -->
+
+<!-- Header Section Begin -->
+    <header class="header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xl-3 col-lg-2">
+                    <div class="header__logo">
+                        <a href="{% url 'home' %}"><img src="{% static 'img/logo.png' %}" alt=""></a>
+                    </div>
+                </div>
+                <div class="col-xl-6 col-lg-7">
+                    <nav class="header__menu">
+                        <ul>
+                            <li class="active"><a href="{% url 'home' %}">Home</a></li>
+                            <!-- <li><a href="#">Women’s</a></li>
+                            <li><a href="#">Men’s</a></li> -->
+                            <li><a href="{% url 'shop' %}">Shop</a></li>
+                            <li><a href="#">Pages</a>
+                                <ul class="dropdown">
+                                    <li><a href="{% url 'category_list' %}">Categories</a></li>
+                                    <li><a href="{% url 'cart:index' %}">Shop Cart</a></li>
+                                    <li><a href="{% url 'my-orders' %}">Order history</a></li>
+                                    <!-- <li><a href="./blog-details.html">Blog Details</a></li> -->
+                                </ul>
+                            </li>
+                            <!-- <li><a href="./blog.html">Blog</a></li> -->
+                            <li><a href="{% url 'contact' %}">Contact</a></li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-0">
+                    <div class="header__right px-0 justify-content-between align-items-center">
+                    
+                        <ul class="header__right__widget">
+                            <li><span class="icon_search search-switch"></span></li>
+                            {% if user.id is not None %}
+                            <li><a href="{% url 'cart:index' %}"><span class="icon_bag_alt"></span>
+                                <div class="tip">
+                                    {{ cart_item_count }}
+                                </div>
+                            </a></li>
+                            {% endif %}
+                        </ul>
+
+                        {% if user.id is None %}
+                            <div class="header__right__auth">
+                                <button class="btn btn-primary" data-toggle="modal" data-target="#modal-login">
+                                    Sign In / Register
+                                </button>
+                            </div>
+                        {% else %}
+                            <div class="header__right__auth">
+                                <a href="{% url 'dashboard' %}">Hi {{ user.first_name }}</a>
+                                <a id="logout" data-target="{% url 'logout' %}" href="#">Sign Out</a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="canvas__open">
+                <i class="fa fa-bars"></i>
+            </div>
+        </div>
+    </header>
+    <!-- Header Section End -->
+
+
+    <script>
+        $(function() {
+            $("#keyword").autocomplete({
+            source: "/shop/search_auto/",
+            select: function (event, ui) { //item selected
+                AutoCompleteSelectHandler(event, ui)
+            },
+            minLength: 2,
+            });
+        });
+        function AutoCompleteSelectHandler(event, ui)
+        {
+            var selectedObj = ui.item;
+        }
+    </script>
+
+    <!-- Search Begin -->
+    <div class="search-model">
+        <div class="h-100 d-flex align-items-center justify-content-center">
+            <div class="search-close-switch">+</div>
+            <form action="{% url 'search' %}" class="search-model-form" method="POST">
+                {% csrf_token %}
+                <input type="text" class="form-control" style="width:60%;" placeholder="Search here..." id="keyword" name="keyword">
+                <br>
+			    <div class="input-group-append">
+			      <button class="btn btn-dark" type="submit">
+			        <i class="fa fa-search"></i>
+			      </button>
+			    </div>
+            </form>
+        </div>
+    </div>
+    <!-- Search End -->

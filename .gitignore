@@ -127,3 +127,18 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+media/
+tmp/
+*.zip
+_dev/
+.csv/
+webpack/node_modules
+*.rar
+.vscode
+_db.sqlite3
+scripts/
+# webpack/
+
+t.py
+t2.py

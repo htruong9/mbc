@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block scripts %}
+<script>
+    const csrfmiddlewaretoken = "{{ csrf_token }}"
+    const cart_items = JSON.parse(`[{% for cart_item in cart_items %} {% if forloop.last %} {{cart_item.id}} {% else %} {{cart_item.id}}, {% endif %} {% endfor %}]`)
+    
+    let logo_fee = parseFloat("{{ logo_fee }}")
+    let delivery_fee = parseFloat("{{ delivery_fee }}")
+
+    const Fee = {
+        logo_fee: {
+            before: logo_fee,
+            after: logo_fee
+        },
+        delivery_fee: {
+            before: delivery_fee,
+            after: delivery_fee
+        },
+    }
+
+</script>
+{% endblock %}
+
+{% load static %}
+{% block content %}
+    {% include 'common/breadcrumb.html' %}
+
+    {% comment %} Shop Cart Section Begin  {% endcomment %}
+        <section class="shop-cart spad">
+            <div class="container">
+                {% if not cart_items %}
+                    <h2 class="text-center">Your Shopping Cart is Empty</h2>
+                    <br>
+                    <div class="col-lg-6 col-md-6 col-sm-6">
+                        <div class="cart__btn">
+                            <a href="{% url 'shop' %}">Continue Shopping</a>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="row">
+                        <div class="col-lg-12">
+                            {% include "./cart-table.html" %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="cart__btn">
+                                <a href="{% url 'shop' %}">Continue Shopping</a>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-8">
+                            {% include "./_checkout-form.html" %}
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="cart__total__procced">
+                                <h6>Cart total</h6>
+                                <ul>
+                                    <li id="cart_total__subtotal" class="pair-container">Subtotal
+                                        <div class="value">
+                                            <span class="value">{{ tax|floatformat:2 }}</span>
+                                        </div>
+                                    </li>
+                                    <li id="cart_total__tax" class="pair-container">Tax
+                                        <div class="value">
+                                            <span class="value">{{ tax|floatformat:2 }}</span>
+                                        </div>
+                                    </li>
+                                    <li id="cart_total__setup_logo">Setup logo
+                                        <div class="setup_logo__items__container ml-5">
+                                        </div> 
+                                    </li>
+                                    <li id="cart_total__delivery" class="pair-container">Delivery fee 
+                                        <div class="value">
+                                            <span class="value"></span>
+                                        </div>
+                                    </li>
+                                    <li id="cart_total__grand_total" class="pair-container">Total
+                                        <div class="value">
+                                            <span class="value"></span>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <!-- {# <a href="{% url 'checkout' %}" class="primary-btn">Proceed to checkout</a> #} -->
+                                
+                                <button data-url="{% url 'confirm_order' %}" id="checkout" class="primary-btn">Proceed to checkout</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% include "common/alerts.html" %}
+                {% endif %}
+            </div>
+        </section>
+
+        {% comment %} {% include "common/review_order.html" %} {% endcomment %}
+
+
+        
+    {% comment %} Shop Cart Section End {% endcomment %}
+
+{% endblock %}

@@ -1,0 +1,5 @@
+{% if not logo_text.logo.is_setup %} 
+    <div class="logo-not-setup hidden" data-id="{{ logo_text.logo.id }}" data-src="{{ logo_text.logo.image }}"></div>
+    <span>(one-time setup)</span>
+{% else %}
+{% endif %}

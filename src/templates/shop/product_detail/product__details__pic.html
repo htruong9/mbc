@@ -1,0 +1,25 @@
+<div class="product__details__pic">
+    <div class="product__details__pic__left product__thumb nice-scroll">
+        {% if variant.image_gallery != None %}
+            <a class="pt" href="#main"><img src="{{ product.images.url }}" alt=""></a>
+        {% else %}
+            <a class="pt" href="#main"><img src="{{ product.images.url }}" alt=""></a>
+        {% endif %}
+
+        {% for i in product_gallery %}
+            <a class="pt active" href="#{{ i.id }}"><img src="{{ i.image.url }}" alt=""></a>
+        {% endfor %}
+    </div>
+    <div class="product__details__slider__content">
+        <div class="product__details__pic__slider owl-carousel">
+            {% if variant.image_gallery != None %}
+            <img data-hash="main" class="product__big__img" src="{{ product.images.url }}" alt="">
+            {% else %}
+            <img data-hash="main" class="product__big__img" src="{{ product.images.url }}" alt="">
+            {% endif %}
+            {% for i in product_gallery %}
+                <img data-hash="{{ i.id }}" class="product__big__img" src="{{ i.image.url }}" alt="">
+            {% endfor %}
+        </div>
+    </div>
+</div>

@@ -1,0 +1,692 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block content %}
+    {% include 'includes/breadcrumb.html' %}
+
+    <!-- Product Details Section Begin -->
+    <section class="product-details spad">
+        <div class="container">
+            <div class="row">
+                <aside class="col-lg-6">
+                    <div class="product__details__pic">
+                        <div class="product__details__pic__left product__thumb nice-scroll">
+                            {% if variant.image_gallery != None %}
+                                <a class="pt" href="#main"><img src="{{ product.images.url }}" alt=""></a>
+                            {% else %}
+                                <a class="pt" href="#main"><img src="{{ product.images.url }}" alt=""></a>
+                            {% endif %}
+
+                            {% for i in product_gallery %}
+                                <a class="pt active" href="#{{ i.id }}"><img src="{{ i.image.url }}" alt=""></a>
+                            {% endfor %}
+                        </div>
+                        <div class="product__details__slider__content">
+                            <div class="product__details__pic__slider owl-carousel">
+                                {% if variant.image_gallery != None %}
+                                <img data-hash="main" class="product__big__img" src="{{ product.images.url }}" alt="">
+                                {% else %}
+                                <img data-hash="main" class="product__big__img" src="{{ product.images.url }}" alt="">
+                                {% endif %}
+                                {% for i in product_gallery %}
+                                    <img data-hash="{{ i.id }}" class="product__big__img" src="{{ i.image.url }}" alt="">
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+                <main class="col-lg-6">
+                    <div class="product__details__text">
+                        <h3>{{ product.product_name }} <span>Brand: {{ product.brand }}</span></h3>
+                        <div class="rating">
+                            <span>
+                                <i class="fa fa-star{% if product.averageReview < 0.5 %}-o{% elif product.averageReview >= 0.5 and product.averageReview < 1 %}-half-o {% endif %}" aria-hidden="true"></i>
+                                <i class="fa fa-star{% if product.averageReview < 1.5 %}-o{% elif product.averageReview >= 1.5 and product.averageReview < 2 %}-half-o {% endif %}" aria-hidden="true"></i>
+                                <i class="fa fa-star{% if product.averageReview < 2.5 %}-o{% elif product.averageReview >= 2.5 and product.averageReview < 3 %}-half-o {% endif %}" aria-hidden="true"></i>
+                                <i class="fa fa-star{% if product.averageReview < 3.5 %}-o{% elif product.averageReview >= 3.5 and product.averageReview < 4 %}-half-o {% endif %}" aria-hidden="true"></i>
+                                <i class="fa fa-star{% if product.averageReview < 4.5 %}-o{% elif product.averageReview >= 4.5 and product.averageReview < 5 %}-half-o {% endif %}" aria-hidden="true"></i>
+                                <span>{{product.countReview}} reviews</span>
+                            </span>
+                        </div>
+                        <div class="product__details__price">£{{ product.price }} <span>£{{ product.price }}</span></div>
+                        <p>{{ product.description }}</p>
+                        <script>
+                                var productId = "{{product.id}}"
+                                var productPrice = parseFloat("{{product.price}}") // use UserSelected.Variant.price
+                                var variantId = "{{variant.id}}"
+                                var variantPrice = parseFloat("{{variant.price}}")
+                                var variantTitle = "{{variant.title}}"
+                                var colourId = "{{variant.colour_id}}"
+                                var colourTitle = "{{variant.colour.title}}"
+                                var sizeId = "{{variant.size_id}}"
+                                var isRequire = ("{{has_any_ordered_success}}" === 'False')
+                        </script>
+                    </div>
+
+                        {% if product.variant == 'Size-Colour' %}
+                        <div class="product-options" >
+                            <div class="size-option product-option" data-type="Size">
+                                <form method="POST" id="post-form">
+                                    <input type="hidden" name="productid" id="productid" value="{{ product.id }}">
+                                    <span class="text-uppercase">Size :</span>
+                                    {% csrf_token %}
+                                    <div class="select-wrapper">
+                                        <select class="dropdown" name="size" id="size_select">
+                                            {% for rs in sizes %}
+                                                <option {% if variant.size_id == rs.size_id %} selected {% endif %} value="{{ rs.size_id }}">{{ rs.size.title }}</option>
+                                                
+                                            {% endfor %}
+                                        </select>
+                                        <div class="select_arrow"></div>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="colour-options product-option" data-type="Colour">
+                                <form method="post" action="?q=selectvariant" id="post-color">
+                                    {% csrf_token %}
+                                    <div id="appendHere">
+                                        <input type="hidden" name="size" id="size" value="{{ size_id }}">
+                                        <ul class="color-option" >
+                                            <span class="text-uppercase">Colour:</span>
+                                            {% for rs in colours %}
+                                                <label style="border-color: black transparent transparent transparent;" title="{{ rs.colour }}">
+                                                    <input type="radio" {% if variant.id == rs.id %} checked {% endif %} name="variantid" id="variantid" value="{{ rs.id }}" onchange="this.form.submit();">
+                                                    <a {% if variant.id == rs.id %} class="active" {% endif %}>
+                                                        <img src="{{ rs.image }}" style="height: 50px">
+                                                    </a>
+                                                </label>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </form>
+                            </div>
+
+                            {% if not has_any_ordered_success %}
+                            <div class="require-logo-text-options product-option" data-type="Require_logo_text">
+                                <div>Select logo/text (require)</div>
+                                <div class="select-wrapper">
+                                    <select name="" class="logo-text__select">
+                                        <option value="1" data-price="14.95">Logo</option>
+                                        <option value="2" data-price="0">Text</option>
+                                    </select>
+                                    <div class="select_arrow"></div>
+                                </div>
+                                
+                                <div class="options-container mt-3">
+                                    <div class="logo-option" style="display: block;">
+                                        <div class="d-flex justify-content-center border border-dark">
+                                            <div id="logo-suggest" class="p-3">
+                                                {% if logo_suggest|length > 0 %}
+                                                    <input type="button" class="btn_show-uploaded-logo hide" value="Choose an uploaded logo">
+                                                    <!-- Choose an uploaded logo</button> -->
+                                                    <div class="d-flex justify-content-between">
+                                                        <div>Choose exist</div>
+                                                        <div class="custom-file" style="width:fit-content !important">
+                                                            <input type="file" class="file-upload-input hide">
+                                                            <input type="button" value="Upload new file"  onclick="this.previousElementSibling.click();">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="img-container container h-100">
+                                                        <div class="row mt-4 ">
+                                                            
+                                                            {% for logo in logo_suggest %}
+                                                                <div class="uploaded-logo-select col-4 col-image p-2" data-value="{{logo.id}}" data-ordered="{{logo.ordered}}">
+                                                                    <span class="checkmark"></span>
+                                                                    <img src="/media/{{logo.image}}" maxx-height="200px" class="border border-dark" onerror="this.closest('.col-image').style.display='none'"> </img>
+                                                                </div>
+                                                            {% endfor %}
+                                                        </div>
+                                                    </div>
+                                                {% else %}
+                                                    <div class="d-flex justify-content-center">
+                                                        <div class="custom-file" style="width:fit-content !important">
+                                                            <input type="file" class="file-upload-input hide">
+                                                            <input type="button" value="Upload new file"  onclick="this.previousElementSibling.click();">
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+
+                                        <img class="file-upload__preview" src="" alt="File preview" onerror="this.style.display='none'"/>
+
+                                    </div>
+
+                                    <div class="text-option">
+                                        <div class="form-group">
+                                            <label for="text_option__input">Enter your text</label>
+                                            <input type="text" class="form-control text-input" id="require_text_option__input" aria-describedby="text_option__help">
+                                            <label for="require_text__font_option__input">Font</label>
+                                            <input type="text" class="form-control font-input" id="require_text__font_option__input" aria-describedby="text_option__help">
+                                            <label for="require_text__color_option__input">Color</label>
+                                            <input type="color" class="form-control color-input" id="require_text__color_option__input" aria-describedby="text_option__help">
+                                            <!-- <small id="text_option__help" class="form-text text-muted">Add this for small text description.</small> -->
+                                          </div>
+                                    </div>
+
+                                    <div class="product-option position-option" data-type="Require_logo_text">
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            {% endif %}
+
+                            <div class="position-options product-option" data-type="Position">
+                                <label for="">
+                                    <span class="text-uppercase">Position:</span>
+                                </label>
+                                <div class="select-wrapper">
+                                    <select id="position">
+                                        {% for pos in product.positions.all %}
+                                            <option value="{{pos.position}}" data-price="{{pos.price}}" data-title="{{pos.title}}">{{pos.title}}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <div class="select_arrow"></div>
+                                </div>
+                            </div>
+
+                            <div class="additional-position product-option" data-type="Additional position">
+                                <div>Additional Position?</div>
+                                <div class="select-wrapper">
+                                    <select name="" id="additional-position__select">
+                                        <option value="0">No</option>
+                                        <option value="1">Yes</option>
+                                    </select>
+                                    <div class="select_arrow"></div>
+                                </div>
+
+                                <div class="checkbox-group my-3 hide">
+                                    <div class="checkbox-label mb-2">
+                                        Please choose one or more additional positions.
+                                    </div>
+                                    {% for pos in product.positions.all %}
+                                        <!-- {# pos.pop.0 #} -->
+                                        <div class="checkbox-container">
+                                            <input type="checkbox" name="{{pos.position}}" id="{{pos.position}}" class="position-checkbox" data-price="{{pos.additional_price}}"  data-title="{{pos.title}}">
+                                            <label for="{{pos.position}}" data-price="{{pos.additional_price}}" data-title="{{pos.title}}">{{pos.title}}</label>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <div class="additional-logo-text product-option" data-type="Additional_logo_text">
+                                <div>Additional logo/text?</div>
+                                <div class="select-wrapper">
+                                    <select name="" class="logo-text__select">
+                                        <option value="0" data-price="0">No</option>
+                                        <option value="1" data-price="14.95">Logo</option>
+                                        <option value="2" data-price="0">Text</option>
+                                    </select>
+                                    <div class="select_arrow"></div>
+                                </div>
+                                
+                                <div class="options-container mt-3">
+                                    <div class="logo-option">
+                                        <div class="d-flex justify-content-center border border-dark">
+                                            <div id="logo-suggest" class="p-3">
+                                                {% if logo_suggest|length > 0 %}
+                                                    <input type="button" class="btn_show-uploaded-logo hide" value="Choose an uploaded logo">
+                                                    <!-- Choose an uploaded logo</button> -->
+                                                    <div class="d-flex justify-content-between">
+                                                        <div>Choose exist</div>
+                                                        <div class="custom-file" style="width:fit-content !important">
+                                                            <input type="file" class="file-upload-input hide">
+                                                            <input type="button" value="Upload new file"  onclick="this.previousElementSibling.click();">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="img-container container h-100">
+                                                        <div class="row mt-4 ">
+                                                            
+                                                            {% for logo in logo_suggest %}
+                                                                <div class="uploaded-logo-select col-4 col-image p-2" data-value="{{logo.id}}" data-ordered="{{logo.ordered}}">
+                                                                    <span class="checkmark"></span>
+                                                                    <img src="/media/{{logo.image}}" maxx-height="200px" class="border border-dark" onerror="this.closest('.col-image').style.display='none'"> </img>
+                                                                </div>
+                                                            {% endfor %}
+                                                        </div>
+                                                    </div>
+                                                {% else %}
+                                                    <div class="d-flex justify-content-center">
+                                                        <div class="custom-file" style="width:fit-content !important">
+                                                            <input type="file" class="file-upload-input hide">
+                                                            <input type="button" value="Upload new file"  onclick="this.previousElementSibling.click();">
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+
+                                        <img class="file-upload__preview" src="" alt="File preview" onerror="this.style.display='none'"/>
+                                    </div>
+
+                                    <div class="text-option">
+                                        <div class="form-group">
+                                            <label for="text_option__input">Enter your text</label>
+                                            <input type="text" class="form-control text-input" id="text_option__input" aria-describedby="text_option__help">
+                                            <label for="additional_text__font_option__input">Font</label>
+                                            <input type="text" class="form-control font-input" id="additional_text__font_option__input" aria-describedby="text_option__help">
+                                            <label for="additional_text__color_option__input">Color</label>
+                                            <input type="color" class="form-control color-input" id="additional_text__color_option__input" aria-describedby="text_option__help">
+                                          </div>
+                                    </div>
+
+                                    <div class="product-option position-option hide" data-type="Additional logo text">
+                                        <div class="checkbox-group my-3">
+                                            <div class="checkbox-label mb-2">
+                                                Please choose one or more additional positions.
+                                            </div>
+                                            {% for pos in product.positions.all %}
+                                                {# pos.pop.0 #}
+                                                <div class="checkbox-container">
+                                                    <input type="checkbox" name="{{pos.position}}" id="logo_text_position__{{pos.position}}" class="position-checkbox" data-price="{{pos.additional_price}}"  data-title="{{pos.title}}">
+                                                    <label for="logo_text_position__{{pos.position}}" data-price="{{pos.additional_price}}">{{pos.title}}</label>
+                                                </div>
+                                            {% endfor %}
+                                    
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+
+                            <div class="additional-name product-option" data-type="Additional name">
+                                <div>Additional name?</div>
+                                <div class="select-wrapper">
+                                    <select name="" id="additional-name__select">
+                                        <option value="0">No</option>
+                                        <option value="1">Yes</option>
+                                    </select>
+                                    <div class="select_arrow"></div>
+                                </div>
+
+                                <div class="checkbox-group my-3 hide">
+                                    <div class="checkbox-label mb-2">
+                                        Please choose one or more additional positions.
+                                    </div>
+                                    {% for pos in product.positions.all %}
+                                        <!-- {# pos.pop.0 #} -->
+                                        <div class="checkbox-container">
+                                            <input type="checkbox" name="{{pos.position}}" id="name_position__{{pos.position}}" class="additional-name-position-checkbox" data-price="{{pos.name_price}}"  data-title="{{pos.title}}">
+                                            <label for="name_position__{{pos.position}}" data-price="{{pos.name_price}}">{{pos.title}}</label>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                
+                                <div class="form-group-wrapper hide my-3">
+                                    <div class="form-group">
+                                        <label for="input__additional-name">Please specify a name</label>
+                                        <input type="text" class="form-control" id="input__additional-name" placeholder="Enter name..." maxlength="100">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        {% endif %}
+
+                        {% if  product.variant != 'None'   %}
+                            <form action="{% url 'cart:add_cart' product.id %}" method="POST"  id="addchart-form">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="variantid" id="variantid" value="{{ variant.id }}">
+                                    <div id="data-checked-position" class="d-non" data-t="[]"></div>
+                                    
+                                    <div id="order-sum" class="mt-4">
+                                        <div class="h5">Summary:</div>
+                                        <div class="container" class="mt-2">
+                                            <div id="sum_variant-price" class="sum-item sum-item-first">
+                                                <div class="pair-container" >
+                                                    <div class="title">Product price (variant price)</div>
+                                                    <div class="value"></div>
+                                                </div>
+                                            </div>
+                                            <div id="sum_colour" class="sum-item">
+                                                <div class="pair-container" >
+                                                    <div class="title">Colour</div>
+                                                    <div class="value">{{ variant.colour }}</div>
+                                                </div>
+                                            </div>
+                
+                                            <div id="sum_size" class="sum-item">
+                                                <div class="pair-container">
+                                                    <div class="title">Size</div>
+                                                    <div class="value"></div>
+                                                </div>
+                                            </div>
+                
+                                            <div id="sum_require-logo-text" class="sum-item preview-text">
+                                            </div>
+
+                                            <div id="sum_position" class="sum-item">
+                                                <div class="pair-container">
+                                                    <div class="title">Position</div>
+                                                    <div class="value"></div>
+                                                </div>
+                                            </div>
+                
+                                            <div id="sum_additional-position" class="sum-item sum-additional">
+                                                <div class="pair-container">
+                                                    <div class="title">Additional position</div>
+                                                    <div class="value"></div>
+                                                </div>
+                                            </div>
+                
+                                            <div id="sum_additional-logo-text" class="sum-item sum-additional preview-text">
+                                            </div>
+                
+                                            <div id="sum_additional-name" class="sum-item sum-additional">
+                                            </div>
+                
+                                            <div id="sum_delivery-fee" class="sum-item hide">
+                                                <div class="pair-container">
+                                                    <div class="title">Delivery fee</div>
+                                                    <div class="value"></div>
+                                                </div>
+                                            </div>
+                
+                                            <div id="sum_vouchers" class="sum-item">
+                                
+                                            </div>
+                                        </div>
+                                        <div id="price-sum" class="mt-2">
+                                            <div class="pair-container text-uppercase font-weight-bold h4">
+                                                <div class="title">Total</div>
+                                                <div class="value">0</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                
+
+                                    <!-- <h3 class="product-price">£{{ variant.price }}</h3> -->
+                                    <div class="product__details__button">
+                                        <div class="quantity">
+                                            <span>Quantity:</span>
+                                            <div class="pro-qty">
+                                                <input class="input no-spin" type="number" name="quantity" value="1" min="1">
+                                            </div>
+                                        </div>
+                                        <button type="button" id="add-to-cart" class="cart-btn"><span class="icon_bag_alt"></span> Add to cart</button>
+                                        <ul>
+                                            <li><a href="#"><span class="icon_heart_alt"></span></a></li>
+                                            <li><a href="#"><span class="icon_adjust-horiz"></span></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </form>
+                        {% else %}
+                            <form action="{% url 'cart:add_cart' product.id %}" method="POST"  id="addchart-form">
+                                {% csrf_token %}
+                                <div id="SelectedProduct">
+                                    <h3 class="product-price">£{{ product.price }}</h3>
+                                    <div class="product__details__button">
+                                        <div class="quantity">
+                                            <span>Quantity:</span>
+                                            <div class="pro-qty">
+                                                <input class="input  no-spin" type="number" name="quantity" value="1" min="1">
+                                            </div>
+                                        </div>
+                                        <button type="button" id="add-to-cart" class="cart-btn"><span class="icon_bag_alt"></span> Add to cart</button>
+                                        <ul>
+                                            <li><a href="#"><span class="icon_heart_alt"></span></a></li>
+                                            <li><a href="#"><span class="icon_adjust-horiz"></span></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </form>
+                        {% endif %}
+                    <!-- </div> -->
+                </main>
+                <div class="col-lg-12">
+                    <div class="product__details__tab">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab">Description</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">Discounts</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab">Delivery/ Production Time</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#tabs-4" role="tab">Reviews ( 2 )</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tabs-1" role="tabpanel">
+                                <h6><strong>Description</strong></h6>
+                                <p>{{ product.description }}</p>
+                                <p>{{ product.detail | safe }}</p>
+                                <strong>Washing Intructions</strong>
+                                <p>{{ product.washing }}</p>
+                                <strong>Size</strong>
+                                <p></p>
+                                <strong>Fabric</strong>
+                                <p>{{ product.fabric }}</p>
+                                <strong>Weight</strong>
+                                <p>{{ product.weight }}</p>
+                            </div>
+                            <div class="tab-pane" id="tabs-2" role="tabpanel">
+                                <h6><strong>Discounts</strong></h6>
+                                <p>This product is included in our Mix and Save discount offer.
+                                    This means to can mix different items and still get saving.
+                                    Our discounts system is based on the number of products in the basket, regardless of type or brand.
+                                    As you add products our system will automatically update the prices on the webshop
+                                    so you can see what you are saving as you are going along.</p>
+                                <p>Also if your total order is greater then 250 items,
+                                    contact us as we may be able to save you even more.</p>
+                            </div>
+                            <div class="tab-pane" id="tabs-3" role="tabpanel">
+                                <h6><strong>Delivery/ Production Time</strong></h6>
+                                <p>Our standard delivery time is 5 to 10 working day’s from order confirmation,
+                                    this can be longer during busy periods or if a product is out of stock.</p>
+                                <p>If an items is out of stock will offer you and alternative
+                                    if one is available or the options to cancel that part or all of your order.</p>
+                                <p>If you need your items quicker or by a specific date then just let us know.
+                                    We can sometime move jobs around to fit in rush jobs, so it always worth asking.</p>
+                                <p>Once you order has been confirmed, including all artworks approved,
+                                    we will give you an estimated delivery date.</p>
+                                <p>Blank sample items will normally be dispatched within 5 days subject to availability.</p>
+                            </div>
+                            <div class="tab-pane" id="tabs-4" role="tabpanel">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <h5><strong>Customer reviews</strong></h5>
+                                        {% for review in reviews %}
+                                            <article class="box mb-3">
+                                                <div class="icontext w-100">
+                                                    <div class="text">
+                                                        <span class="date text-muted float-md-right">{{ review.updated_at }} </span>
+                                                        <h6 class="mb-1">{{ review.user.first_name }} </h6>
+                                                        <div class="rating-star">
+                                                            <span>
+                                                                <i class="fa fa-star{% if review.rating == 0.5 %}-half-o{% elif review.rating < 1 %}-o {% endif %}" aria-hidden="true"></i>
+                                                                <i class="fa fa-star{% if review.rating == 1.5 %}-half-o{% elif review.rating < 2 %}-o {% endif %}" aria-hidden="true"></i>
+                                                                <i class="fa fa-star{% if review.rating == 2.5 %}-half-o{% elif review.rating < 3 %}-o {% endif %}" aria-hidden="true"></i>
+                                                                <i class="fa fa-star{% if review.rating == 3.5 %}-half-o{% elif review.rating < 4 %}-o {% endif %}" aria-hidden="true"></i>
+                                                                <i class="fa fa-star{% if review.rating == 4.5 %}-half-o{% elif review.rating < 5 %}-o {% endif %}" aria-hidden="true"></i>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div> <!-- icontext.// -->
+                                                <div class="mt-3">
+                                                    <h6>{{ review.subject }}</h6>
+                                                    <p>
+                                                        {{ review.review }}
+                                                    </p>
+                                                </div>
+                                            </article>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="col-lg-6">
+                                        {% include 'includes/alerts.html' %}
+                                        <h5><strong>Write Your Review</strong></h5>
+                                        <form action="{% url 'submit_review' product.id %}" method="POST">
+                                            {% csrf_token %}
+                                            <br>
+                                            <div>
+                                                <!-- Rating stars -->
+                                                <label>How do you rate this product?</label>
+                                                <br>
+                                                <div class="rate">
+                                                    <input type="radio" name="rating" id="rating10" value="5" required /><label for="rating10" title="5"></label>
+                                                    <input type="radio" name="rating" id="rating9" value="4.5" required /><label for="rating9" title="4.5" class="half"></label>
+                                                    <input type="radio" name="rating" id="rating8" value="4" required /><label for="rating8" title="4"></label>
+                                                    <input type="radio" name="rating" id="rating7" value="3.5" required /><label for="rating7" title="3.5" class="half"></label>
+                                                    <input type="radio" name="rating" id="rating6" value="3" required /><label for="rating6" title="3"></label>
+                                                    <input type="radio" name="rating" id="rating5" value="2.5" required /><label for="rating5" title="2.5" class="half"></label>
+                                                    <input type="radio" name="rating" id="rating4" value="2" required /><label for="rating4" title="2"></label>
+                                                    <input type="radio" name="rating" id="rating3" value="1.5" required /><label for="rating3" title="1.5" class="half"></label>
+                                                    <input type="radio" name="rating" id="rating2" value="1" required /><label for="rating2" title="1"></label>
+                                                    <input type="radio" name="rating" id="rating1" value="0.5" required /><label for="rating1" title="0.5" class="half"></label>
+                                                </div>
+                                                <br>
+                                                Title:
+                                                <input type="text" class="form-control" name="subject" placeholder="Your title">
+                                                <br>
+                                                Review:
+                                                <textarea name="review" rows="4" class="form-control" class="input" placeholder="Your review"></textarea>
+                                                <br>
+                                                {% if user.is_authenticated %}
+                                                    {% if order_product %}
+                                                        <input type="submit" value="Submit Review" class="btn btn-primary">
+                                                    {% else %}
+                                                        <p>You must purchase this product to post a review.</p>
+                                                    {% endif %}
+                                                {% else %}
+                                                <p>You must be logged in to post a review. <span><a href="{% url 'login' %}">Login now</a></span></p>
+                                                {% endif %}
+
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="related__title">
+                        <h5>RELATED PRODUCTS</h5>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="product__item">
+                        <div class="product__item__pic set-bg" data-setbg="img/product/related/rp-1.jpg">
+                            <div class="label new">New</div>
+                            <ul class="product__hover">
+                                <li><a href="img/product/related/rp-1.jpg" class="image-popup"><span class="arrow_expand"></span></a></li>
+                                <li><a href="#"><span class="icon_heart_alt"></span></a></li>
+                                <li><a href="#"><span class="icon_bag_alt"></span></a></li>
+                            </ul>
+                        </div>
+                        <div class="product__item__text">
+                            <h6><a href="#">Buttons tweed blazer</a></h6>
+                            <div class="rating">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                            </div>
+                            <div class="product__price">$ 59.0</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="product__item">
+                        <div class="product__item__pic set-bg" data-setbg="img/product/related/rp-2.jpg">
+                            <ul class="product__hover">
+                                <li><a href="img/product/related/rp-2.jpg" class="image-popup"><span class="arrow_expand"></span></a></li>
+                                <li><a href="#"><span class="icon_heart_alt"></span></a></li>
+                                <li><a href="#"><span class="icon_bag_alt"></span></a></li>
+                            </ul>
+                        </div>
+                        <div class="product__item__text">
+                            <h6><a href="#">Flowy striped skirt</a></h6>
+                            <div class="rating">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                            </div>
+                            <div class="product__price">$ 49.0</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="product__item">
+                        <div class="product__item__pic set-bg" data-setbg="img/product/related/rp-3.jpg">
+                            <div class="label stockout">out of stock</div>
+                            <ul class="product__hover">
+                                <li><a href="img/product/related/rp-3.jpg" class="image-popup"><span class="arrow_expand"></span></a></li>
+                                <li><a href="#"><span class="icon_heart_alt"></span></a></li>
+                                <li><a href="#"><span class="icon_bag_alt"></span></a></li>
+                            </ul>
+                        </div>
+                        <div class="product__item__text">
+                            <h6><a href="#">Cotton T-Shirt</a></h6>
+                            <div class="rating">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                            </div>
+                            <div class="product__price">$ 59.0</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="product__item">
+                        <div class="product__item__pic set-bg" data-setbg="img/product/related/rp-4.jpg">
+                            <ul class="product__hover">
+                                <li><a href="img/product/related/rp-4.jpg" class="image-popup"><span class="arrow_expand"></span></a></li>
+                                <li><a href="#"><span class="icon_heart_alt"></span></a></li>
+                                <li><a href="#"><span class="icon_bag_alt"></span></a></li>
+                            </ul>
+                        </div>
+                        <div class="product__item__text">
+                            <h6><a href="#">Slim striped pocket shirt</a></h6>
+                            <div class="rating">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                            </div>
+                            <div class="product__price">$ 59.0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Product Details Section End -->
+<!-- 
+    <div class="overlay hide" data-type="">
+        <div class="img-container container h-100 d-flex align-items-center">
+            <div class="row mt-4 ">
+                {% for logo in logo_suggest %}
+                    <div class="uploaded-logo-select col-3 col-image p-0" data-value="{{logo.id}}" data-ordered="{{logo.ordered}}">
+                        <span class="checkmark"></span>
+                        <img src="/media/{{logo.image}}" maxx-height="200px" class="border border-dark" onerror="this.style.display='none'"> </img>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div> -->
+
+    <script>console.log('hi there')</script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/static/css/product_detail-custom-style.css">
+
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<section class="section-conten padding-y bg mt-4">
+	{% include 'common/alerts.html' %}
+	<div class="container">
+		<div class="row">
+			{% include 'common/dashboard_sidebar.html' %}
+			{% block dashboard_main %}
+			{% endblock %}
+		</div> <!-- row.// -->
+	</div>
+</section>
+{% endblock %}

@@ -1,0 +1,127 @@
+<div class="product__details__tab">
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab">Description</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">Discounts</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab">Delivery/ Production Time</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#tabs-4" role="tab">Reviews ( 2 )</a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="tabs-1" role="tabpanel">
+            <h6><strong>Description</strong></h6>
+            <p>{{ product.description }}</p>
+            <p>{{ product.detail | safe }}</p>
+            <strong>Washing Intructions</strong>
+            <p>{{ product.washing }}</p>
+            <strong>Size</strong>
+            <p></p>
+            <strong>Fabric</strong>
+            <p>{{ product.fabric }}</p>
+            <strong>Weight</strong>
+            <p>{{ product.weight }}</p>
+        </div>
+        <div class="tab-pane" id="tabs-2" role="tabpanel">
+            <h6><strong>Discounts</strong></h6>
+            <p>This product is included in our Mix and Save discount offer.
+                This means to can mix different items and still get saving.
+                Our discounts system is based on the number of products in the basket, regardless of type or brand.
+                As you add products our system will automatically update the prices on the webshop
+                so you can see what you are saving as you are going along.</p>
+            <p>Also if your total order is greater then 250 items,
+                contact us as we may be able to save you even more.</p>
+        </div>
+        <div class="tab-pane" id="tabs-3" role="tabpanel">
+            <h6><strong>Delivery/ Production Time</strong></h6>
+            <p>Our standard delivery time is 5 to 10 working day’s from order confirmation,
+                this can be longer during busy periods or if a product is out of stock.</p>
+            <p>If an items is out of stock will offer you and alternative
+                if one is available or the options to cancel that part or all of your order.</p>
+            <p>If you need your items quicker or by a specific date then just let us know.
+                We can sometime move jobs around to fit in rush jobs, so it always worth asking.</p>
+            <p>Once you order has been confirmed, including all artworks approved,
+                we will give you an estimated delivery date.</p>
+            <p>Blank sample items will normally be dispatched within 5 days subject to availability.</p>
+        </div>
+        <div class="tab-pane" id="tabs-4" role="tabpanel">
+            <div class="row">
+                <div class="col-lg-6">
+                    <h5><strong>Customer reviews</strong></h5>
+                    {% for review in reviews %}
+                        <article class="box mb-3">
+                            <div class="icontext w-100">
+                                <div class="text">
+                                    <span class="date text-muted float-md-right">{{ review.updated_at }} </span>
+                                    <h6 class="mb-1">{{ review.user.first_name }} </h6>
+                                    <div class="rating-star">
+                                        <span>
+                                            <i class="fa fa-star{% if review.rating == 0.5 %}-half-o{% elif review.rating < 1 %}-o {% endif %}" aria-hidden="true"></i>
+                                            <i class="fa fa-star{% if review.rating == 1.5 %}-half-o{% elif review.rating < 2 %}-o {% endif %}" aria-hidden="true"></i>
+                                            <i class="fa fa-star{% if review.rating == 2.5 %}-half-o{% elif review.rating < 3 %}-o {% endif %}" aria-hidden="true"></i>
+                                            <i class="fa fa-star{% if review.rating == 3.5 %}-half-o{% elif review.rating < 4 %}-o {% endif %}" aria-hidden="true"></i>
+                                            <i class="fa fa-star{% if review.rating == 4.5 %}-half-o{% elif review.rating < 5 %}-o {% endif %}" aria-hidden="true"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div> <!-- icontext.// -->
+                            <div class="mt-3">
+                                <h6>{{ review.subject }}</h6>
+                                <p>
+                                    {{ review.review }}
+                                </p>
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+                <div class="col-lg-6">
+                    {% include 'common/alerts.html' %}
+                    <h5><strong>Write Your Review</strong></h5>
+                    <form action="{% url 'submit_review' product.id %}" method="POST">
+                        {% csrf_token %}
+                        <br>
+                        <div>
+                            <!-- Rating stars -->
+                            <label>How do you rate this product?</label>
+                            <br>
+                            <div class="rate">
+                                <input type="radio" name="rating" id="rating10" value="5" required /><label for="rating10" title="5"></label>
+                                <input type="radio" name="rating" id="rating9" value="4.5" required /><label for="rating9" title="4.5" class="half"></label>
+                                <input type="radio" name="rating" id="rating8" value="4" required /><label for="rating8" title="4"></label>
+                                <input type="radio" name="rating" id="rating7" value="3.5" required /><label for="rating7" title="3.5" class="half"></label>
+                                <input type="radio" name="rating" id="rating6" value="3" required /><label for="rating6" title="3"></label>
+                                <input type="radio" name="rating" id="rating5" value="2.5" required /><label for="rating5" title="2.5" class="half"></label>
+                                <input type="radio" name="rating" id="rating4" value="2" required /><label for="rating4" title="2"></label>
+                                <input type="radio" name="rating" id="rating3" value="1.5" required /><label for="rating3" title="1.5" class="half"></label>
+                                <input type="radio" name="rating" id="rating2" value="1" required /><label for="rating2" title="1"></label>
+                                <input type="radio" name="rating" id="rating1" value="0.5" required /><label for="rating1" title="0.5" class="half"></label>
+                            </div>
+                            <br>
+                            Title:
+                            <input type="text" class="form-control" name="subject" placeholder="Your title">
+                            <br>
+                            Review:
+                            <textarea name="review" rows="4" class="form-control" class="input" placeholder="Your review"></textarea>
+                            <br>
+                            {% if user.is_authenticated %}
+                                {% if order_product %}
+                                    <input type="submit" value="Submit Review" class="btn btn-primary">
+                                {% else %}
+                                    <p>You must purchase this product to post a review.</p>
+                                {% endif %}
+                            {% else %}
+                            <p>You must be logged in to post a review. <span><a href="{% url 'login' %}">Login now</a></span></p>
+                            {% endif %}
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

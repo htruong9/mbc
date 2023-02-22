@@ -1,0 +1,176 @@
+<form id="add-cart" action="{% url 'cart:add_cart' %}" method="post" enctype="multipart/form-data">
+    {% if product.variant == 'Size-Colour' %}
+    <div class="product-options">
+        {% csrf_token %}
+        <!-- VARIANT -->
+        <select name="variant_id" id="variant" hidden>
+            {% for variant in variants %}
+                <option 
+                    value="{{ variant.id }}" 
+                    data-size_id="{{ variant.size_id }}"
+                    data-color_id="{{ variant.colour_id }}" 
+                    data-price="{{ variant.price }}"
+                ></option>
+            {% endfor %}
+        </select>
+
+        <!-- SIZE -->
+        <div class="size-option product-option" data-value="{{ variant.size.id }}">
+            <span class="text-uppercase">Size :</span>
+            <div class="select-wrapper">
+                <select class="dropdown" name="size_id" id="size">
+                    {% for variant in variants_by_size %}
+                        <option 
+                        value="{{ variant.size_id }}"
+                        {% if variant.size_id == first_variant.size_id %} 
+                            selected 
+                        {% endif %}
+                        >
+                            {{ variant.size.title }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <div class="select_arrow"></div>
+            </div>
+        </div>
+
+        <!-- COLOR -->
+        <div class="color-option product-option">
+            <span class="text-uppercase">Colour:</span>
+            <div class="option-container">
+                <div class="color-option__list " >
+                    {% for variant in variants_by_color %}
+                    <div class="color-option__item d-inline-block">
+                        <input 
+                            type="radio" 
+                            name="color_id" 
+                            id="color__{{ variant.colour.id }}" 
+                            value="{{ variant.colour.id }}"
+                            hidden
+                            {% if variant.id == first_variant.id %}
+                                checked
+                            {% endif %}
+                        >
+                        <div class="color-option__img d-inline-block">
+                            <label style="border-color: black transparent transparent transparent;" for="color__{{ variant.colour.id }}" title="{{ variant.colour }}">
+                                <img src="{{ variant.image }}" style="height: 50px">
+                            </label>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN LOGO_TEXT: LOGO/TEXT -->
+        <div class="main-logo-text-option product-option">
+            <div>Select logo/text (main)</div>
+            <div class="select-wrapper">
+                <select name="main_logo_text__type" id="main-logo-text__select" class="logo-text__select">
+                    <option value="1" data-price="{{ LOGO_FEE }}" norender-price>Logo</option>
+                    <option value="2" data-price="{{ TEXT_FEE }}" norender-price>Text</option>
+                </select>
+                <div class="select_arrow"></div>
+            </div>
+            
+            <div class="option-container mt-3">
+                {% include './logo-text-option-container.html' with type="main" text_option_extra_class="hide" %}
+            </div>
+        </div>
+
+        <!-- MAIN LOGO_TEXT: POSITION -->
+        <div class="main-position-option product-option" data-type="Position">
+            <label for="">
+                <span class="text-uppercase">Position:</span>
+            </label>
+            <div class="select-wrapper">
+                <select id="main-position" name="main_logo_text__position">
+                    {% for pos in product.positions.all %}
+                        <option value="{{ pos.id }}" data-price="{{ pos.price }}" data-title="{{ pos.title }}">{{pos.title}}</option>
+                    {% endfor %}
+                </select>
+                <div class="select_arrow"></div>
+            </div>
+        </div>
+
+        <!-- MAIN LOGO_TEXT: ADDITIONAL POSITIONS -->
+        <div class="additional-position product-option" data-type="Additional position">
+            <div>Additional Position?</div>
+            <div class="select-wrapper">
+                <select name="main_logo_text__additional_position__is_select" id="additional-position__select">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
+                <div class="select_arrow"></div>
+            </div>
+
+            <div class="option-container hide">
+                {% include './additional_positions__checkbox-group.html' with type="main" %}
+            </div>
+        </div>
+
+        <!-- ADDITIONAL LOGO_TEXT -->
+        <div class="additional-logo-text product-option" data-type="Additional_logo_text">
+            <div>Additional logo/text?</div>
+            <div class="select-wrapper">
+                <select name="additional_logo_text__type" id="additional-logo-text__select" class="logo-text__select">
+                    <option value="0" data-price="0">No</option>
+                    <option value="1" data-price="14.95" norender-price>Logo</option>
+                    <option value="2" data-price="0" norender-price>Text</option>
+                </select>
+                <div class="select_arrow"></div>
+            </div>
+            
+            <div class="option-container mt-3">
+                {% include './logo-text-option-container.html' with type="additional" logo_option_extra_class="hide" text_option_extra_class="hide" %}
+                <div class="product-option position-option hide" data-type="Additional logo text">
+                    <div class="checkbox-group my-3">
+                        <div class="checkbox-label mb-2">
+                            Please choose one or more additional positions.
+                        </div>
+                        {% for pos in product.positions.all %}
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="additional-logo-text__positions__{{ pos.id }}" name="additional_logo_text__positions" value="{{ pos.id }}" class="position-input" data-price="{{ pos.additional_price }}"  data-title="{{ pos.title }}">
+                            <label for="additional-logo-text__positions__{{ pos.id }}" data-price="{{pos.additional_price}}" data-title="{{pos.title}}">{{pos.title}}</label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ADDITIONAL NAME -->
+        <div class="additional-name product-option" data-type="Additional name">
+            <div>Additional name?</div>
+            <div class="select-wrapper">
+                <select name="additional-name__is_select" id="additional-name__select">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
+                <div class="select_arrow"></div>
+            </div>
+            <div class="option-container my-3 hide">
+                <div class="checkbox-group my-3">
+                    <div class="checkbox-label mb-2">
+                        Please choose one or more additional positions.
+                    </div>
+                    {% for pos in product.positions.all %}
+                        {% if pos.name_price != None %}
+                        <div class="checkbox-container">
+                            <input type="checkbox" name="additional_name__positions" value="{{ pos.id }}" id="name_position__{{pos.position}}" class="additional-name-position-checkbox position-input" data-price="{{pos.name_price}}"  data-title="{{pos.title}}">
+                            <label for="name_position__{{pos.position}}" data-price="{{pos.name_price}}">{{pos.title}}</label>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    <label for="input__additional-name">Please specify a name</label>
+                    <input type="text" class="form-control" id="input__additional-name" name="additional_name__value" placeholder="Enter name..." maxlength="100">
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% include './summary.html' %}
+</form>

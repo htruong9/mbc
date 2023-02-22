@@ -1,0 +1,10 @@
+<div class="cart-item row" data-id="{{ cart_item.id }}" data-each_item_price="{{ cart_item.each_item_price }}"
+    data-all_item_price="{{ cart_item.each_item_price }}" data-quantity="{{ cart_item.quantity }}">
+
+    <div class="col-12 cart-item__product d-flex justify-content-between">
+        <div class="w-100">
+            {% include "./_cart-item__detail.html" with enable_edit=True %}
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,417 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block content %}
+
+<!-- Breadcrumb Begin -->
+    <script>
+        const csrfmiddlewaretoken = "{{ csrf_token }}"
+        const cart_items = JSON.parse(`[{% for cart_item in cart_items %} {% if forloop.last %} {{cart_item.id}} {% else %} {{cart_item.id}}, {% endif %} {% endfor %}]`)
+    </script>
+
+    <link rel="stylesheet" href="/static/css/cart.css"/>
+
+    <div class="breadcrumb-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__links">
+                        <a href="{% url 'home' %}"><i class="fa fa-home"></i> Home</a>
+                        <a href="{% url 'shop' %}">Shop</a>
+                        <span>Shopping cart</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+
+    <!-- Shop Cart Section Begin -->
+    <section class="shop-cart spad">
+        <div class="container">
+            {% if not cart_items %}
+                <h2 class="text-center">Your Shopping Cart is Empty</h2>
+                <br>
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                    <div class="cart__btn">
+                        <a href="{% url 'shop' %}">Continue Shopping</a>
+                    </div>
+                </div>
+            {% else %}
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="shop__cart__table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <!-- <th></th> -->
+                                        <th>Product</th>
+                                        <th>Price</th>
+                                        <th>Quantity</th>
+                                        <th>Total</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for cart_item in cart_items %}
+                                        <tr class="cart__wrapper" data-id="{{ cart_item.id }}" style="border: none;">
+                                            <!-- <td>
+                                                <input type="checkbox" name="" id="" class="mx-5">
+                                            </td> -->
+                                            <td class="cart__product__item">
+                                                <img src="{{ cart_item.product.images.url }}" alt="" height="90px">
+                                                <div class="cart__product__item__title mr-3">
+                                                    <a href="{{ cart_item.product.get_url }}" class="title text-dark">{{ cart_item.product.product_name }} ({{cart_item.size}} - {{cart_item.colour}})</a>
+                                                    
+                                                    <div class="order_detail-container mt-3">
+                                                        <!-- Require logo/text -->
+                                                        {% if cart_item.require_logo_text %}
+                                                        <div class="pair-container d-block">
+                                                            {% if cart_item.require_logo_text.is_logo %}
+
+                                                            <div class="sub-pair-container">
+                                                                <div class="title">Logo</div>
+                                                                <div class="value">
+                                                                    <img src="/media/{{ cart_item.require_logo_text.logo.image }}" width="64px" alt="" onerror="this.parentNode.style.color='red';this.parentNode.textContent='Image not found'">
+                                                                </div>
+                                                            </div>
+
+                                                            {% else %}
+
+                                                            <div class="sub-pair-container">
+                                                                <div class="title">Text</div>
+                                                                <div class="value" style="color: {{cart_item.require_logo_text.color}};">{{ cart_item.require_logo_text.text }}</div>
+                                                            </div>
+                                                            <div class="sub-pair-container">
+                                                                <div class="title">Font</div>
+                                                                <div class="value">{{ cart_item.require_logo_text.font }}</div>
+                                                            </div>
+                                                            <div class="sub-pair-container">
+                                                                <div class="title">Color</div>
+                                                                <div class="value">{{ cart_item.require_logo_text.color }}</div>
+                                                            </div>
+
+                                                            {% endif %}
+
+                                                            <div class="ssub-pair-container">
+                                                                <span class="title">Position</span>
+                                                            {% for pos in cart_item.require_logo_text.positions.all %}
+                                                                <span class="value">
+                                                                    {% if forloop.last %}
+                                                                    {{ pos }} {% if pos.additional_price > 0 %} (+£{{pos.additional_price}}) {% endif%}
+                                                                    {% else %}
+                                                                    {{ pos }} {% if pos.additional_price > 0 %} (+£{{pos.additional_price}}) {% endif%}, 
+                                                                    {% endif %}
+                                                                </span>
+                                                                {% endfor %}
+                                                            </div>
+
+                                                            {% if cart_item.additional_positions.all.count > 0 %}
+                                                            <div class="ssub-pair-container">
+                                                                <span class="title">Additional position</span>
+                                                            {% for pos in cart_item.additional_positions.all %}
+                                                                <span class="value">
+                                                                    {% if forloop.last %}
+                                                                    {{ pos }} {% if pos.additional_price > 0 %} (+£{{pos.additional_price}}) {% endif%}
+                                                                    {% else %}
+                                                                    {{ pos }} {% if pos.additional_price > 0 %} (+£{{pos.additional_price}}) {% endif%}, 
+                                                                    {% endif %}
+                                                                </span>
+                                                                {% endfor %}
+                                                            </div>
+                                                            {% endif %}
+                                                            
+                                                        </div>
+                                                        {% endif %}
+
+                                                        <!-- Additional logo/text -->
+                                                        {% if cart_item.additional_logo_text %}
+                                                        <div class="pair-container d-block">
+                                                            {% if cart_item.additional_logo_text.is_logo %}
+
+                                                            <div class="sub-pair-container">
+                                                                <div class="title">Additional logo</div>
+                                                                <div class="value">
+                                                                    <img src="/media/{{ cart_item.additional_logo_text.logo.image }}" width="64px" alt="" onerror="this.parentNode.style.color='red';this.parentNode.textContent='Image not found'">
+                                                                </div>
+                                                            </div>
+
+                                                            {% else %}
+
+                                                            <div class="sub-pair-container">
+                                                                <div class="title">Additional text</div>
+                                                                <div class="value" style="color: {{cart_item.additional_logo_text.color}};">{{ cart_item.additional_logo_text.text }}</div>
+                                                            </div>
+                                                            <div class="sub-pair-container">
+                                                                <div class="title">Font</div>
+                                                                <div class="value">{{ cart_item.additional_logo_text.font }}</div>
+                                                            </div>
+                                                            <div class="sub-pair-container">
+                                                                <div class="title">Color</div>
+                                                                <div class="value">{{ cart_item.additional_logo_text.color }}</div>
+                                                            </div>
+
+                                                            {% endif %}
+
+                                                            <div class="ssub-pair-container">
+                                                                <span class="title">Position</span>
+                                                            {% for pos in cart_item.additional_logo_text.positions.all %}
+                                                                <span class="value">
+                                                                    {% if forloop.last %}
+                                                                    {{ pos }} {% if pos.additional_price > 0 %} (+£{{pos.additional_price}}) {% endif%}
+                                                                    {% else %}
+                                                                    {{ pos }} {% if pos.additional_price > 0 %} (+£{{pos.additional_price}}) {% endif%}, 
+                                                                    {% endif %}
+                                                                </span>
+                                                                {% endfor %}
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Font, color
+                                                        {% if cart_item.additional_logo_text.is_text %}
+                                                        <div class="pair-container">
+                                                            <div class="title">Font</div>
+                                                            <div class="value">{{ cart_item.additional_logo_text.font }}</div>
+                                                        </div>
+                                                        {% endif %} -->
+
+                                                        {% endif %}
+
+                                                        {% if cart_item.additional_name %}
+                                                        <!-- Additional name -->
+                                                        <div class="pair-container">
+                                                            <div class="">
+                                                                <div class="title">Additional name</div>
+                                                                <div class="">
+                                                                    <span class="title">Position</span>
+                                                                    
+                                                                    {% for pos in cart_item.additional_name.positions.all %}
+                                                                    <span class="value">
+                                                                        {% if forloop.last %}
+                                                                        {{ pos }} {% if pos.name_price > 0 %} (+£{{pos.name_price}}) {% endif%}
+                                                                        {% else %}
+                                                                        {{ pos }} {% if pos.name_price > 0 %} (+£{{pos.name_price}}) {% endif%}, 
+                                                                        {% endif %}
+                                                                    </span>
+                                                                    {% endfor %}
+                                                                    </div>
+                                                                </div>
+                                                                <div class="value">
+                                                                    {{cart_item.additional_name.name}}
+                                                                </div>                    
+                                                        </div>
+                                                        {% endif %}
+                                                    </div>
+
+                                                    <!-- <div>Size: S</div> -->
+
+                                                    <p class="text-muted small">
+                                                        {% if cart_item.variations.all %}
+                                                            {% for item in cart_item.variations.all %}
+                                                                {{ item.variation_category | capfirst }} : {{ item.variation_value | capfirst }} <br>
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    </p>
+                                                </div>
+                                            </td>
+
+                                            <td class="cart__price">
+                                                {% if cart_item.each_item_price == cart_item.each_item_price_after_discount %}
+                                                £{{ cart_item.each_item_price|floatformat:2 }} 
+                                                {% else %}
+                                                <div class="price-before">
+                                                    <del>
+                                                        £{{ cart_item.each_item_price|floatformat:2 }} 
+                                                    </del>
+                                                </div>
+                                                <div class="price-after">
+                                                    £{{ cart_item.each_item_price_after_discount|floatformat:2 }}
+                                                </div>
+                                                {% endif %}
+                                            </td>
+
+                                            <!-- 
+                                            !not responsive
+                                            <td> 
+                                                <div class="col">
+                                                    <div class="input-group input-spinner">
+                                                        <div class="input-group-prepend">
+                                                        <a href="#" class="btn btn-light" type="button" id="button-plus"> <i class="fa fa-minus"></i> </a>
+                                                        </div>
+                                                        <input type="text" class="form-control"  value="{{ cart_item.order_detail.quantity }}">
+                                                        <div class="input-group-append">
+                                                            <form action="#" method="POST">
+                                                                {% csrf_token %}
+                                                                {% for item in cart_item.variations.all %}
+                                                                    <input type="hidden" name="{{ item.variation_category | lower }}" value="{{ item.variation_value | capfirst }}">
+                                                                {% endfor %}
+                                                                <button class="btn btn-light" type="submit" id="button-minus"> <i class="fa fa-plus"></i> </button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div> 
+                                            </td> -->
+                                            <td class="cart__quantity">
+                                                <div class="pro-qty">
+                                                    <input type="text" value="{{ cart_item.quantity }}">
+                                                </div>
+                                            </td>
+
+                                            <td class="cart__total">
+                                                {% if cart_item.all_item_price == cart_item.all_item_price_after_discount %}
+                                                £{{ cart_item.all_item_price|floatformat:2 }} 
+                                                {% else %}
+                                                <div class="price-before">
+                                                    <del>
+                                                        £{{ cart_item.all_item_price|floatformat:2 }} 
+                                                    </del>
+                                                </div>
+                                                <div class="price-after">
+                                                    £{{ cart_item.all_item_price_after_discount|floatformat:2 }}
+                                                </div>
+                                                {% endif %}
+                                            </td>
+                                            <!-- {# <td class="cart__close"><a href="{% url 'remove_cart_item' cart_item.product.id %}" onclick="return confirm('Are you sure you want to delete this item?')"><span class="icon_close"></span></a></td> #} -->
+                                            <td class="cart__close">
+                                                <span class="icon_close"></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <!-- <td colspan="1" class="px-5">
+                                                <div class="pair-container">
+                                                    <div class="title">Logo</div>
+                                                    <div class="value">
+                                                        <img src="http://localhost:8000/media/logo-upload/3/69d2ceb441fe950ba8581a89a316aa6279db36e5.jpg" width="90px" alt="">
+                                                    </div>
+                                                </div>
+                                                
+                                                
+                                            </td> -->
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-6">
+                        <div class="cart__btn">
+                            <a href="{% url 'shop' %}">Continue Shopping</a>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-lg-8 checkout__form">
+                        <h5>Billing detail</h5>
+                        <div class="row">
+                          <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="checkout__form__input">
+                              <p>First Name <span>*</span></p>
+                              <input type="text" name="first_name" required/>
+                            </div>
+                          </div>
+                          <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="checkout__form__input">
+                              <p>Last Name <span>*</span></p>
+                              <input type="text" name="last_name" required/>
+                            </div>
+                          </div>
+                          <div class="col-lg-12">
+                            <div class="checkout__form__input">
+                              <p>Country <span>*</span></p>
+                              <input type="text" name="country" required/>
+                            </div>
+                            <div class="checkout__form__input">
+                              <p>Address <span>*</span></p>
+                              <input type="text" placeholder="Street Address" name="address_line_1" required/>
+                              <input
+                                type="text"
+                                placeholder="Apartment. suite, unite ect ( optinal )"
+                                name="address_line_2"
+                              />
+                            </div>
+                            <div class="checkout__form__input">
+                              <p>Town/City <span>*</span></p>
+                              <input type="text" name="city" required/>
+                            </div>
+                            <div class="checkout__form__input">
+                              <p>Country/State <span>*</span></p>
+                              <input type="text" name="state" required/>
+                            </div>
+                            <div class="checkout__form__input">
+                              <p>Postcode/Zip <span>*</span></p>
+                              <input type="text" name="postcode" required/>
+                            </div>
+                          </div>
+                          <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="checkout__form__input">
+                              <p>Phone <span>*</span></p>
+                              <input type="text" name="phone" required/>
+                            </div>
+                          </div>
+                          <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="checkout__form__input">
+                              <p>Email <span>*</span></p>
+                              <input type="text" name="email" required/>
+                            </div>
+                          </div>
+                          <div class="col-lg-12">
+                            <div class="checkout__form__checkbox">
+                              <label for="note">
+                                Note about your order, e.g, special noe for delivery
+                                <input type="checkbox" id="note" />
+                                <span class="checkmark"></span>
+                              </label>
+                            </div>
+                            <div class="checkout__form__input">
+                              <p>Oder notes <span>*</span></p>
+                              <input
+                                type="text"
+                                name="note"
+                                placeholder="Note about your order, e.g, special noe for delivery"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    <!-- <div class="col-lg-6">
+                        <div class="discount__content">
+                            <h6>Discount codes</h6>
+                            <form action="#">
+                                <input type="text" placeholder="Enter your coupon code">
+                                <button type="submit" class="site-btn">Apply</button>
+                            </form>
+                        </div>
+                    </div> -->
+                    <!-- <div class="col-lg-4 offset-lg-2"> -->
+                    <div class="col-lg-4">
+                        <div class="cart__total__procced">
+                            <h6>Cart total</h6>
+                            <ul>
+                                <li id="cart_total__subtotal">Subtotal <span>{{ total|floatformat:2 }}</span></li>
+                                <li id="cart_total__tax">Tax <span>{{ tax|floatformat:2 }}</span></li>
+                                <li id="cart_total__setup_logo">Setup logo
+                                    <div class="setup_logo__items__container">
+                                    </div> 
+                                </li>
+                                <li id="cart_total__delivery">Delivery fee<span></span></li>
+                                <li id="cart_total__grand_total">Total <span>{{ grand_total|floatformat:2 }}</span></li>
+                            </ul>
+                            <!-- {# <a href="{% url 'checkout' %}" class="primary-btn">Proceed to checkout</a> #} -->
+                            <button data-url="{% url 'confirm_order' %}" id="checkout" class="primary-btn">Proceed to checkout</button>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+
+    {% include "includes/review_order.html" %}
+
+
+    <script src="/static/js/shop-cart.js" ></script>
+    <!-- Shop Cart Section End -->
+
+{% endblock %}

@@ -1,0 +1,12 @@
+<input type="hidden" name="size" id="size" value="{{ size_id }}">
+<ul class="color-option" >
+    <span class="text-uppercase">Colour:</span>
+    {% for rs in colours %}
+        <label style="border-color: black transparent transparent transparent;" title="{{ rs.colour }}">
+            <input type="radio" {% if variant.id == rs.id %} checked {% endif %} name="variantid" id="variantid" value="{{ rs.id }}" onchange="this.form.submit();">
+            <a {% if variant.id == rs.id %} class="active" {% endif %}>
+                <img src="{{ rs.image }}" style="height: 50px">
+            </a>
+        </label>
+    {% endfor %}
+</ul>

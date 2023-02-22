@@ -1,0 +1,72 @@
+<div class="cart-item__detail">
+    <div class="cart-item__title d-flex justify-content-between">
+        <a class="font-weight-bold text-dark d-flex align-items-center" href="{{ cart_item.variant.product.get_url }}">
+            <img src="{{ cart_item.variant.product.images.url }}" height="64px" alt="">
+            <div class="ml-3">
+                {{ cart_item.variant.product.product_name }} ({{cart_item.variant.size}} -
+                {{cart_item.variant.colour}})
+            </div>
+        </a>
+
+        <input 
+            id="add-to-order__{{ cart_item.id }}" 
+            data-id="{{ cart_item.id }}"
+            type="checkbox"
+            name="cart_id"
+            aria-label="Checkbox for following text input"
+            checked
+            hidden
+        >
+
+        {% if enable_edit %}
+        <div>
+            <button type="button" class="delete-cart btn btn-danger"
+                onclick="confirmDeleteCartItem({{ cart_item.id }})"
+                >
+                Delete
+            </button>
+        </div>
+        {% endif %}
+    </div>
+    {% include "./_logo-text.html" %}
+    {% include "./_additional-logo-text.html" %}
+    {% include "./_additional-name.html" %}
+    <!-- <div class="cart-item__info"> -->
+        {% if enable_edit %}
+        <div class="cart-item__quantity d-flex align-items-center">
+            <span class="cart-detail__title">Quantity</span>
+            <!-- <span class="cart-detail__value">{{ cart_item.quantity }}</span> -->
+            <div class="ml-3">
+                <div class="cart__quantity">
+                    <div class="pro-qty">
+                        <input type="text" value="{{ cart_item.quantity }}">
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="cart-item__quantity">
+            <span class="cart-detail__title">Quantity</span>
+            <span class="cart-detail__value">{{ cart_item.quantity }}</span>
+        </div>
+        {% endif %}
+        <div class="cart-item__total d-flex" data-price={{ cart_item.get_total_price }}>
+            <span class="cart-detail__title">Total</span>
+            <span class="cart-detail__value">£{{ cart_item.get_total_price }}</span>
+        </div>
+    <!-- </div> -->
+
+    <!-- <div class="cart-item__action">
+        <div class="d-flex justify-content-between align-items-center"> -->
+            <!-- <label class="btn btn-success d-flex align-items-center m-0" for="add-to-order__{{ cart_item.id }}"> -->
+                <!-- <div class="pr-2">
+                    Add to order
+                </div> -->
+            <!-- </label> -->
+            
+            
+            <!-- <div></div>
+            
+        </div>
+    </div> -->
+</div>

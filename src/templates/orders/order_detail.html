@@ -1,0 +1,86 @@
+<div id="order-detail">
+    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="false">
+        <div class="modal-dialog modal-dialog-centered  modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Order number: #{{ order.order_number }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-body">
+                        <div class="container-fluid">
+
+                            <div class="row">
+                                <div class="col-12">
+                                    <div>
+                                        <span class="cart-detail__title">Name</span> 
+                                        <span class="cart-detail__value">{{ order.receiver_info.full_name }}</span>
+                                    </div>
+                                    <div>
+                                        <span class="cart-detail__title">Email</span> 
+                                        <span class="cart-detail__value">{{ order.receiver_info.email }}</span>
+                                    </div>
+                                    <div>
+                                        <span class="cart-detail__title">Phone number</span> 
+                                        <span class="cart-detail__value">{{ order.receiver_info.phone }}</span>
+                                    </div>
+                                    <div>
+                                        <span class="cart-detail__title">Address</span> 
+                                        <span class="cart-detail__value">{{ order.receiver_info.full_address }}</span>
+                                    </div>
+                                    <div>
+                                        <span class="cart-detail__title">Created at</span> 
+                                        <span class="cart-detail__value">{{ order.created_at }}</span>
+                                    </div>
+                                    <div>
+                                        <span class="cart-detail__title">Status</span> 
+                                        <span class="cart-detail__value">{{ order.status }}</span>
+                                    </div>
+                                    <div>
+                                        <span class="cart-detail__title">Setup fee</span> 
+                                        <span class="cart-detail__value">{{ order.set_up_fee }}</span>
+                                    </div>
+                                    <div>
+                                        <span class="cart-detail__title">Delivery fee</span> 
+                                        <span class="cart-detail__value">{{ order.delivery_fee }}</span>
+                                    </div>
+                                    <div>
+                                        <span class="cart-detail__title">Total</span> 
+                                        <span class="cart-detail__value">{{ order.total }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <b>Items:</b>
+                                </div>
+                                {% for cart_item in order.cart_items.all %}
+                                <div class="col-12">
+                                {% include "cart/index/_cart-item__detail.html" with enable_edit=False %}
+                                </div>
+                                {% endfor %}
+                            </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            const modal = $('#order-detail .modal')
+            modal.modal('show')
+            modal.on('hidden.bs.modal', function () {
+                $('#order-detail').remove()
+            })
+        });
+    </script>
+</div>

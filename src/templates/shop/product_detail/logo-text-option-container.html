@@ -1,0 +1,100 @@
+<div class="logo-text-option-container">
+    <div class="logo-option {{ logo_option_extra_class }}">
+        <div class="logo-option__title font-weight-bold">
+            Choose a logo
+        </div>
+        <div class="logo-container d-flexx justify-content-center border border-dark">
+            <div id="logo-option" class="p-3">
+                <div class="img-container container h-100">
+                    <div class="row align-items-ceter">
+                        <!-- Upload file -->
+                        <div class="col-6 col-md-4 p-1 file-upload" id="{{ type }}-logo__file-upload">
+                            <input type="file" id="{{ type }}-logo-file" name="{{ type }}_logo" class="file-upload__input hide" accept="image/*">
+                            <label class="card h-100" for="{{ type }}-logo-file">
+                                    <div class="card-image__container text-center align-items-center" style="height: 100%;">
+                                        <div>
+                                            <img src="" class="card-img-top logo-image" alt="..."
+                                            onerror="this.style.display='none'"
+                                            >
+                                            <i class="fa fa-upload" style="font-size: 36px;"></i>            
+                                            <div>Upload new logo</div>                            
+                                        </div>
+                                    </div>
+                                    <div class="card-body p-2 hide">
+                                    </div>
+                            </label>
+                        </div>
+
+                        <!-- File preview -->
+                        <div class="col-6 col-md-4 p-1 file-preview hide" id="{{ type }}-logo__file-upload">
+                            <input 
+                                type="radio" 
+                                class="logo__input" 
+                                id="{{ type }}-logo-file__preview" 
+                                name="{{ type }}_logo" value="-1" 
+                                class="hide"
+                            >
+                            <label class="card h-100 d-flex" for="{{ type }}-logo-file__preview">
+                                <div class="card-image__container">
+                                    <img src="" class="card-img-top logo-image" alt="..."
+                                        onerror="this.style.display='none'"
+                                    >
+                                </div>
+                                <div class="card-body p-2">
+                                    <p class="card-text">
+                                        Setup:
+                                        <i class="pl-2 fa fa-times-circle" style="color: #e74f4f;"></i>
+                                    </p>     
+                                </div>
+                            </label>
+                        </div>
+
+                        <!-- Uploaded logo card -->
+                        {% for logo in logos %}
+                        <div class="col-6 col-md-4 p-1 {% if forloop.counter > 5 %} {% endif %}">
+                            <input 
+                                type="radio" 
+                                class="logo__input" 
+                                id="{{ type }}-logo-file__{{ logo.id }}" 
+                                name="{{ type }}_logo" value="{{ logo.id }}" 
+                                class="hide"
+                                setup
+                            >
+                            <label class="card h-100 d-flex" for="{{ type }}-logo-file__{{ logo.id }}">
+                                <div class="card-image__container">
+                                    <img src="/media/{{logo.image}}" class="card-img-top logo-image" alt="..."
+                                        onerror="this.style.display='none'"
+                                    >
+                                </div>
+                                <div class="card-body p-2">
+                                    <p class="card-text">Setup:
+                                        {% if logo.is_setup %}
+                                        <i class="pl-2 fa fa-check-circle" style="color: #17d17a;"></i>
+                                        {% else %}
+                                        <i class="pl-2 fa fa-times-circle" style="color: #e74f4f;"></i>
+                                        {% endif %}
+                                    </p>     
+                                </div>
+                            </label>
+                        </div>
+                        {% endfor %} 
+                        <!-- <div class="w-100 text-center">
+                            <button type="button" class="expand expand--show">Show all</button>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-option {{ text_option_extra_class }}">
+        <div class="form-group">
+            <label for="{{ type }}_text__value_option__input">Enter your text</label>
+            <input type="text" name="{{ type }}_text__value" class="form-control text-input" id="{{ type }}_text__value_option__input" aria-describedby="text_option__help">
+            <label for="{{ type }}_text__font_option__input">Font</label>
+            <input type="text" name="{{ type }}_text__font" class="form-control font-input" id="{{ type }}_text__font_option__input" aria-describedby="text_option__help">
+            <label for="{{ type }}_text__color_option__input">Color</label>
+            <input type="color" name="{{ type }}_text__color" class="form-control color-input" id="{{ type }}_text__color_option__input" aria-describedby="text_option__help">
+        </div>
+    </div>
+</div>

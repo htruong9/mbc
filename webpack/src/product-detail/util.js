@@ -1,0 +1,1 @@
+export const getProductOptionRoot = function(element) { return element.closest('.product-option') }

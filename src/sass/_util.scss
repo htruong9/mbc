@@ -1,0 +1,75 @@
+.select_arrow {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+    border-style: solid;
+    border-width: 9px 6px 0 6px;
+    border-color: #aaa transparent transparent transparent;
+}
+
+.hide {
+    display: none;
+}
+
+.no_selection {
+    user-select: none; /* standard syntax */
+    -webkit-user-select: none; /* webkit (safari, chrome) browsers */
+    -moz-user-select: none; /* mozilla browsers */
+    -khtml-user-select: none; /* webkit (konqueror) browsers */
+    -ms-user-select: none; /* IE10+ */
+}
+
+.no-spin::-webkit-inner-spin-button, .no-spin::-webkit-outer-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0 !important;
+}
+
+.no-spin {
+    -moz-appearance:textfield !important;
+}
+
+.border-line {
+    border: 1px solid black;
+    width: 80%;
+    max-height: 1px;
+}
+
+.view-more {
+    color: #00a6ff;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.fail-message{
+    color: red;
+    font-weight: 500;
+}
+.success-message{
+    color: #168d45;
+    font-weight: 500;
+}
+
+.has-error {
+    input:placeholder-shown {
+        border-color: red;
+
+        ~ .help-block {
+            color: red;
+            font-weight: 500;
+            font-size: 0.9em;
+        }
+    }  
+
+    input:not(:placeholder-shown) {
+        border-color: green;
+        
+        ~ .help-block {
+            display: none;
+        }
+    }
+}

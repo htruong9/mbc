@@ -1,0 +1,127 @@
+/* Hide Radio button */
+.rate > input{
+  display: none;
+}
+
+.rate{
+  display: inline-block;;
+  border: 0;
+}
+
+.rate > label{
+  float: right;
+}
+
+/* Showing the stars */
+.rate > label:before{
+  display: inline-block;
+  font-size: 1.1rem;
+  font-family: FontAwesome;
+  content: "\f005";
+  margin:0;
+  padding:0.3rem .2rem;
+  cursor: pointer;
+}
+
+/* Half star */
+.rate .half:before{
+  content: "\f089";
+  position: absolute;
+  padding-right: 0;
+}
+
+/* Click and hover */
+input:checked ~ label, label:hover ~ label{
+  color: #ffb503;
+}
+
+/* hover hightlight */
+input:checked + label:hover, input:checked ~ label:hover,input:checked ~ label:hover ~ label,
+label:hover ~ input:checked ~ label{
+  color: #cc9000;
+}
+
+.rating-star i{
+  color: #ffb503 !important;
+}
+
+ul.thumb{
+  margin:0 auto;
+  padding: 0;
+  float: left;
+}
+ul.thumb li{
+  list-style: none;
+  margin: 10px;
+}
+ul.thumb li img{
+  width: 80px;
+  height: 80px;
+  border: 1px solid grey;
+}
+
+/* Top Tooltip w/ Bottom Arrow */
+label{
+  cursor: pointer;
+}
+.tooltip{
+  display:none;
+  border: 1px solid red;
+}
+label:hover .tooltip{
+  display:inline-block;
+}
+
+/* HIDE RADIO */
+[type=radio] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* IMAGE STYLES */
+[type=radio] + img {
+  width: 57px;
+  height: 59px;
+  border-radius: 15px;
+  position: relative;
+  text-align: center;
+  padding: 15px 20px;
+  box-shadow: 0 1px #c3c3c3;
+  cursor: pointer;
+  background-color: #0b0b0b;
+  float: left;
+  margin-right: 15px;
+}
+
+
+/* pair-container */
+.pair-container, .sub-pair-container {
+  display: flex;
+  width: 100%;
+}
+
+.pair-container .value, .sub-pair-container .value{
+  margin-left: auto;
+  margin-right: 0;
+  width: fit-content;
+  text-align: right;
+}
+
+.pair-container .title, .sub-pair-container .title {
+  width: fit-content;
+}
+
+.pair-container .title:after, .sub-pair-container .title:after {
+  content: ':';
+}
+
+/* .pair-container.block {
+  display: block !important;
+} */
+
+/* .my-border-bottom {
+  border-bottom: 1px solid #999999;
+} */
+

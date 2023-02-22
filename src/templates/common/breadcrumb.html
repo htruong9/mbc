@@ -1,0 +1,21 @@
+ <!--  TODO: Make it reusable  -->
+<div class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__links">
+                    {% for route in breadcrumb_path.path %}
+                    <a href="{{ route.url }}">
+                        {% if route.icon %}
+                        <i class="{{ route.icon }}"></i>
+                        {% endif %}
+                        {{ route.title }} 
+                    </a>
+                    {% endfor %}
+
+                    <span>{{ breadcrumb_path.end.title }}</span>
+                </div>
+            </div>
+        </div> 
+    </div>
+</div>

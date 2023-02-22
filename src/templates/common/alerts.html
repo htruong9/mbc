@@ -1,0 +1,26 @@
+{% if messages %}
+{% endif %}
+<style>
+    #messages {
+        width: 40%;
+        position: fixed;
+        top: 12px;
+        right: 0;
+    }
+</style>
+<div id="messages" class="container">
+    {% for message in messages %}
+            <div {% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %} role="alert">
+                <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span></button>
+                {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Error: {% endif %}
+                {{ message }}
+            </div>   
+    {% endfor %}
+</div>
+<script>
+    $(document).ready(() => {
+        $(".alert").fadeTo(10000, 500).slideUp(500, function(){
+            $(".alert").slideUp(500);
+        });
+    })
+</script>

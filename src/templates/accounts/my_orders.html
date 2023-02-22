@@ -1,0 +1,37 @@
+{% extends './dashboard_template.html' %}
+
+{% block dashboard_main %}
+<main class="col-md-9">
+	<article class="card">
+		<header class="card-header">
+			<strong class="d-inline-block mr-3">Your order history</strong>
+
+		</header>
+		<div class="card-body">
+				<div class="row order-table" id="order">
+					<div class="order__container container">
+						<div class="order__header row text-center">
+							<div class="col-3" ver>ID</div>
+							<div class="col-6">Info</div>
+							<div class="col-2">Total</div>
+						</div>
+		
+						{% for order in orders %}
+						<div class="order-item row" data-id="{{ order.id }}">
+							<div class="col-3 text-center">
+									{{ order.order_number }}
+							</div>
+		
+							<div class="order-item col-6">
+								<div class="ml-2 view-more" onclick="viewOrderDetail({{ order.id }})">{{ order.cart_items.all.count }} items</div>    
+							</div>
+							<div class="col-2 text-center">{{ order.total }}</div>
+						</div>
+						{% endfor %}
+					</div>
+				</div>
+		</div> <!-- card-body .// -->
+
+	</article> <!-- order-group.// -->
+</main>
+{% endblock %}

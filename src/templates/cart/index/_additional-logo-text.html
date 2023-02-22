@@ -1,0 +1,60 @@
+{% if cart_item.additional_logo_text %}
+    <div class="cart-item__additional-logo-text">
+        {% if cart_item.additional_logo_text.is_logo %}
+            <!-- Logo -->
+            <div class="cart-item__logo d-flex justify-content-between">
+                <div class="cart-detail__title">
+                    Additional logo
+                    {% include "./logo-text__data-is_setup.html" with logo_text=cart_item.main_logo_text %}
+                </div>
+                <div class="cart-detail__value">
+                    <img src="/media/{{ cart_item.additional_logo_text.logo.image }}" width="64px" alt="" onerror="this.parentNode.style.color='red';this.parentNode.textContent='Image not found'">
+                </div>
+            </div>
+        {% else %}
+            <!-- Text -->
+            <div class="cart-item__text d-flex justify-content-between">
+                <div class="cart-detail__title">
+                    Additional text
+                </div>
+                <div class="cart-detail__value" style="color: {{cart_item.additional_logo_text.color}};">
+                    {{ cart_item.additional_logo_text.text }}
+                </div>
+            </div>
+
+            <!-- Font -->
+            <div class="cart-item__font d-flex justify-content-between">
+                <div class="cart-detail__title">
+                    Font
+                </div>
+                <div class="cart-detail__value">
+                    {{ cart_item.additional_logo_text.font }}
+                </div>
+            </div>
+
+            <!-- Color -->
+            <div class="cart-item__color d-flex justify-content-between">
+                <div class="cart-detail__title">
+                    Color
+                </div>
+                <div class="cart-detail__value">
+                    {{ cart_item.additional_logo_text.color }}
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- Position -->
+        <div class="cart-item__position d-flex justify-content-start" style="flex-wrap: wrap;">
+            <span class="cart-detail__title">Position</span>
+                {% for pos in cart_item.additional_logo_text.positions.all %}
+            <span class="cart-detail__value">
+                {% if forloop.last %}
+                    {{ pos }} {% if pos.additional_price > 0 %} (+£{{pos.additional_price}}) {% endif%}
+                {% else %}
+                    {{ pos }} {% if pos.additional_price > 0 %} (+£{{pos.additional_price}}) {% endif%}, 
+                {% endif %}
+            </span>
+            {% endfor %}
+        </div>                          
+    </div>
+{% endif %}

@@ -1,0 +1,19 @@
+<div id="cart">
+    <div id="cart__container" class="container-fluid px-0">
+        <div class="cart__header row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between">
+                    <div>Your cart items</div>
+                    <div ><a class="btn btn-primary" href="{% url 'order' %}">View your order</a></div>
+                </div>
+            </div>
+        </div>
+
+        {% for cart_item in cart_items %}
+            {% include "./_cart-item.html" %}
+        {% endfor %}
+
+    </div>
+</div>
+
+<div style="margin-bottom:200px"></div>

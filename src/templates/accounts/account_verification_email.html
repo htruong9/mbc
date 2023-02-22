@@ -1,0 +1,23 @@
+{% autoescape off %}
+Hi {{ user.first_name }},
+Welcome to MyBrandedClothing!
+
+YOUR ACCOUNT IS ALMOST READY!
+
+Thank you for creating your MyBrandedClothing online account.
+
+To use your account and access the full range of services, please click on the link below:
+http://{{domain}}{% url 'activate' uidb64=uid token=token %}
+
+If clicking doesn't seem to work you can copy and paste the link into our browser's address window or retype it there. Note that this link is only active for a short period of time.
+For security purposes, the link will expire in 24 hours or after you reset your password.
+
+We look forward to your next visit at ....
+
+This is an automatic generated email, please do not reply.
+
+Kind regards,
+
+Your MyBrandedClothing Team
+
+{% endautoescape %}

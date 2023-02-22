@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-blog set-bg" data-setbg="{% static 'img/breadcrumb-bg.jpg' %}">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>Our Categories</h2>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+
+
+    {% load mptt_tags %}
+
+    <!-- Category Section Begin -->
+    <section class="blog spad">
+        <div class="container">
+            <div class="row">
+                <ul>
+                    {% recursetree categories %}
+                        <li>
+                        <a href="#">{{ node.category_name }}</a>
+
+                        {% if not node.is_leaf_node %}
+                            <ul class="children">
+                            <li><h5>Sub</h5></li>
+                                <li><a href="#">{{ children }}</a></li>
+                            </ul>
+                        {% endif %}
+                        </li>
+                    {% endrecursetree %}
+                    </ul>
+            </div>
+        </div>
+    </section>
+    <!-- Category Section End -->
+
+
+{% endblock %}
